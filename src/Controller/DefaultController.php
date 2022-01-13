@@ -56,34 +56,33 @@ class DefaultController extends AbstractController
         return $this->render('pages/account.html.twig');
     }
 
-    /**
-     * @Route("/connect", name="connect")
-     */
-
+   // /**
+     // * @Route("/connect", name="connect")
+      //*/
+/*
     public function connect()
     {
         return $this->render('pages/connect.html.twig');
     }
 
-    /**
+     /* /**
      * @Route("/signin", name="signin")
      */
-
-    public function signin()
+    /* public function signin()
     {
         return $this->render('pages/signin.html.twig');
     }
 
-
+*/
     /**
      * @Route ("/category", name="category")
      */
-
+    // affichage des catégories et fonction du bouton like
     public function category(AdvertRepository $advertRepository,Request $request,AdvertLikeRepository $advertLikeRepository,UserRepository $userRepository): Response
     {
        $objadvert = new AdvertLike();
          // $likeform = $this -> createForm(LikeFormType::class,$objadvert);
-        $likeform = $this -> createFormBuilder()
+        $likeform = $this -> createForm()
         ->add('advert')
         ->add('user')
             ->getForm();
@@ -110,7 +109,7 @@ class DefaultController extends AbstractController
         return $this->render('pages/category.html.twig', ['adverts'=> $adverts,'form'=> $likeform -> createView()]);
     }
 
-
+        // Fonctions pour les filtres
     /**
      * @Route ("/category/multi", name="multi")
      */
@@ -153,7 +152,7 @@ class DefaultController extends AbstractController
     }
 
 
-
+// Affichage des annonces
     /**
      * @Route("/advert/{id}", name="advert")
      */
@@ -173,10 +172,12 @@ class DefaultController extends AbstractController
 
 
     }
-    /**
-     * @Route("/new-advert", name="create_advert")
-     */
-    public function createAdvert(EntityManagerInterface $em): Response{
+
+    // Fonction pour  tester la création d'une advert
+    // /**
+     // * @Route("/new-advert", name="create_advert")
+    // */
+   /* public function createAdvert(EntityManagerInterface $em): Response{
 
         $advert = new Advert();
         $advert->setTitle("ESSAI")
@@ -191,7 +192,7 @@ class DefaultController extends AbstractController
         return new Response("essai 33");
     }
 
-
+*/
 //    /**
   //   * @Route("/category/{id}", name="category")
     // */

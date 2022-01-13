@@ -9,11 +9,21 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\SmallIntType;
 use Doctrine\ORM\Mapping as ORM;
 use phpDocumentor\Reflection\Types\Boolean;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     message="L'email indiqué est déja utilisé"
+ * )
+ * @method string getUserIdentifier()
  */
-class User
+class User implements UserInterface
+
+
 {
     /**
      * @ORM\Id
@@ -24,11 +34,15 @@ class User
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Email(
+     *     message = "L'email n'est pas valide"
+     * )
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min="7", minMessage="7 caractères minimum")
      */
     private $password;
 
@@ -40,8 +54,18 @@ class User
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     *
      */
     private $superuser;
+    /**
+     * @Assert\EqualTo(propertyPath="password",message="Vos mots de passes ne correspondent pas")
+     */
+    public $confirm_password;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $username;
 
     public function __construct()
     {
@@ -108,6 +132,18 @@ class User
 
         return $this;
     }
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
 
     public function getSuperuser(): ?bool
     {
@@ -119,5 +155,26 @@ class User
         $this->superuser = $superuser;
 
         return $this;
+    }
+
+    public function eraseCredentials()
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+
+    public function getSalt()
+    {
+        // TODO: Implement getSalt() method.
+    }
+
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+
+    public function __call(string $name, array $arguments)
+    {
+        // TODO: Implement @method string getUserIdentifier()
     }
 }

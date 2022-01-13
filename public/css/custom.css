@@ -4,7 +4,14 @@
     margin-bottom:-10px ;
 }
 .nav-item{
-   margin-left: -300px ;
+   margin-left: -200px ;
+
+}
+.nav-item-2{
+    margin-right: 300px;
+}
+.nav-item-3{
+    margin-left: -250px;
 }
 a {
     font-size: 22px !important;
@@ -49,7 +56,7 @@ form {
 }
 
 
-
+/* Formulaire */
 input[type="text"],
 input[type="password"],
 input[type="date"],
@@ -171,7 +178,7 @@ EDIT ON
 .profile-pic {
     height: 6rem;
     width: 6rem;
-    object-fit: center;
+    object-fit: unset;
     border-radius: 50%;
     border: 2px solid #fff;
 }
