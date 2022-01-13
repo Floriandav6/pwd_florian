@@ -1,0 +1,25 @@
+{% extends "layouts/zay.html.twig" %}
+{% block content %}
+
+
+    <form action="" method="post">
+
+        <a class="h1 nav-link">Création de compte</a><a class="h1 nav-link" href="{{ path('connect') }}">Se connecter</a>
+
+        <fieldset>
+            <legend><span class="number">1</span>Infos nécessaires</legend>
+            <label for="name">Nom:</label>
+            <input type="text" id="name" name="user_name">
+
+
+            <label for="mail">Email:</label>
+            <input type="email" id="mail" name="user_email">
+
+            <label for="password">Mot de passe:</label>
+            <input type="password" id="password" name="user_password">
+
+
+        </fieldset>
+        <button type="submit">Créer le compte</button>
+    </form>
+{% endblock %}

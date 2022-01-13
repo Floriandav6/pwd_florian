@@ -1,0 +1,19 @@
+easy_admin:
+    entities:
+        Advert:
+            class : App\Entity\Advert
+            form :
+                fields:
+                  - {property: 'Title'}
+                  - {property: 'Price'}
+                  - {property: 'Brand'}
+                  - {property: 'Size'}
+                  - {property: 'Category'}
+
+        AdvertLike:
+            class : App\Entity\AdvertLike
+        Category:
+            class : App\Entity\Category
+        User:
+            class : App\Entity\User
+
