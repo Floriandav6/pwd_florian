@@ -38,14 +38,14 @@ class SecurityController extends AbstractController
             $user->setPassword($hash);
             $em ->persist($user);
             $em->flush();
-            return $this->redirectToRoute('login');
+            return $this->redirectToRoute('connect');
         }
 
         return $this->render('security/signin.html.twig', ['form' => $form->createView() ]);
 
     }
     /**
- * @Route("/login", name="login")
+ * @Route("/connect", name="connect")
  */
 
         public function login(){
