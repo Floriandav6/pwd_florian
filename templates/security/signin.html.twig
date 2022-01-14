@@ -4,7 +4,7 @@
 
     <form action="" method="post">
 
-        <a class="h1 nav-link">Création de compte</a><a class="h1 nav-link" href={{ path('connect') }}>Se connecter</a>
+        <a class="h1 nav-link">Création de compte</a><a class="h1 nav-link" href={{ path('app_login') }}>Se connecter</a>
         {{ form_start(form)}}
         {{ form_row(form.username,{'label':'Nom d\'utilisateur','attr' :{'placeholder':'Nom d\'utilisateur'}}) }}
         {{ form_row(form.email,{'label':'Mail','attr' :{'placeholder':'Adresse mail valide'}}) }}
