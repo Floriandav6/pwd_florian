@@ -12,17 +12,15 @@ use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(
  *     fields={"email"},
  *     message="L'email indiqué est déja utilisé"
  * )
- * @method string getUserIdentifier()
  */
-class User implements UserInterface
-
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 {
     /**
@@ -40,11 +38,14 @@ class User implements UserInterface
      */
     private $email;
 
+
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(min="7", minMessage="7 caractères minimum")
      */
     private $password;
+
+    private $plainPassword;
 
 
     /**
@@ -66,6 +67,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $username;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
 
     public function __construct()
     {
@@ -89,6 +95,9 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
 
     public function getPassword(): ?string
     {
@@ -132,6 +141,17 @@ class User implements UserInterface
 
         return $this;
     }
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+
     public function getUsername(): ?string
     {
         return $this->username;
@@ -157,24 +177,64 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
     public function eraseCredentials()
     {
-        // TODO: Implement eraseCredentials() method.
+        // If you store any temporary, sensitive data on the user, clear it here
+        $this->plainPassword = null;
     }
 
-    public function getSalt()
+    /**
+     * @return mixed
+     */
+    public function getPlainPassword(): string
     {
-        // TODO: Implement getSalt() method.
+        return (string)$this->plainPassword;
     }
 
-    public function getRoles()
+    /**
+     * @param mixed $plainPassword
+     */
+    public function setPlainPassword(string $plainPassword): void
     {
-        return ['ROLE_USER'];
+        $this->plainPassword = $plainPassword;
+
     }
-
-
     public function __call(string $name, array $arguments)
     {
         // TODO: Implement @method string getUserIdentifier()
     }
+
 }

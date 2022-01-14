@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactory;
 
 
@@ -19,36 +20,46 @@ class SecurityController extends AbstractController
     /**
      * @Route("/register", name="register")
      */
-    public function registration(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $encoder) {
-
+    public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response {
         $user = new User();
         $form = $this->createForm(RegistrationType::class, $user);
-
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()) {
-        // On encode le mot de passe avant de persister
-            $factory = new PasswordHasherFactory([
-                'common' => ['algorithm' => 'bcrypt'],
-                'memory-hard' => ['algorithm' => 'sodium'],
-            ]);
-
-
-            $passwordHasher = $factory->getPasswordHasher('common');
-            $hash = $passwordHasher->hash('plain');
-            $user->setPassword($hash);
-            $em ->persist($user);
+        if ($form->isSubmitted() && $form->isValid()){
+            $user->setPassword($passwordHasher->hashPassword($user, $user->getPlainPassword()));
+            dump($user->getPassword());
+            $user->setRoles(['ROLE_USER']);
+            $em->persist($user);
             $em->flush();
-            return $this->redirectToRoute('connect');
+            return $this->redirectToRoute('app_login');
         }
+
 
         return $this->render('security/signin.html.twig', ['form' => $form->createView() ]);
 
     }
     /**
- * @Route("/connect", name="connect")
- */
+     * @Route("/login", name="app_login")
+     */
+    public function login(AuthenticationUtils $authenticationUtils): Response
+    {
+        // if ($this->getUser()) {
+        //     return $this->redirectToRoute('target_path');
+        // }
 
-        public function login(){
-        return $this->render('security/connect.html.twig');
-        }
+        // get the login error if there is one
+        $error = $authenticationUtils->getLastAuthenticationError();
+        // last username entered by the user
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+    }
+
+    /**
+     * @Route("/logout", name="app_logout")
+     */
+    public function logout(): void
+    {
+        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
 }
+
