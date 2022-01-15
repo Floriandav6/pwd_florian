@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Cassandra\Smallint;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\SmallIntType;
@@ -72,6 +71,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="json")
      */
     private $roles = [];
+
+    public function __toString() {
+        return $this->id;
+    }
 
     public function __construct()
     {

@@ -6,12 +6,14 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use App\Entity\Category;
 use App\Entity\Advert;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class AdvertCrudController extends AbstractCrudController
 {
@@ -28,9 +30,13 @@ class AdvertCrudController extends AbstractCrudController
             TextField::new('title'),
             AssociationField::new('category'),
             TextEditorField::new('description'),
+            TextField::new('imageFile')->setFormType(VichImageType::class)->hideOnIndex(),
+            ImageField::new('image')->setBasePath('/img/couverture')->onlyOnIndex(),
             TextField::new('brand'),
             TextField::new('price'),
             TextField::new('size'),
+           //  AssociationField::new('gallery'),
+
 
 
 

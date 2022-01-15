@@ -58,7 +58,7 @@
                     <div class="col-md-4">
                         <div class="card mb-4 product-wap rounded-0">
                             <div class="card rounded-0">
-                                <img class="card-img rounded-0 img-fluid" src="/img/chaussures-de-foot-predator.jpg">
+                                <img class="card-img rounded-0 img-fluid" src="{{vich_uploader_asset(advert, 'imageFile')  }}">
                                 <div class="card-img-overlay rounded-0 product-overlay d-flex align-items-center justify-content-center">
                                     <ul class="list-unstyled">
 
@@ -71,7 +71,7 @@
                             <div class="card-body">
                                 <a class="h3 text-decoration-none text-center mb-0">{{ advert.title }}</a>
                                 <ul class="w-100 list-unstyled d-flex justify-content-between mb-0">
-                                    <li>43</li>
+                                    <li>{{ advert.size }}</li>
                                     <li class="pt-2">
                                         <span class="product-color-dot color-dot-red float-left rounded-circle ml-1"></span>
                                         <span class="product-color-dot color-dot-blue float-left rounded-circle ml-1"></span>
@@ -85,14 +85,7 @@
                                 <p class="text-center mb-0">{{ advert.price }}€</p>
                                 <br>
 
-                                    {{ form_start(form) }}
-                                    <input name="{{ field_name(form.advert) }}" type="hidden" value="{{ advert.id }}" >
 
-
-                                   <input name="{{ field_name(form.user) }}" type="hidden" value="1" >
-
-                                    <button type="submit"> <i class="fas fa-thumbs-up"></i> </button>
-                                    {{ form_end(form) }}
                                     <span class="js-label"><a class="like text-decoration-none" href="">Likes</a></span>
                                     <span class="js-likes">{{ advert.likes | length}}</span>
 
@@ -100,6 +93,7 @@
                         </div>
                     </div>
                     {% endfor %}
+                    <!--
                     <div class="col-md-4">
                         <div class="card mb-4 product-wap rounded-0">
                             <div class="card rounded-0">
@@ -160,14 +154,20 @@
 
                         </div>
                     </div>
-
+                    -->
                 </div>
 
             </div>
 
         </div>
+
+
     </div>
-    <!-- End Content -->
+    <div class="d-flex justify-content-center text-modify">
+    {% do adverts.setPageRange(3) %}
+    {{ knp_pagination_render(adverts,'/pagination/pagination.html.twig') }}
+</div>
+    <!-- End Content -->>
 
     <!-- Start Brands -->
     <section class="bg-light py-5">

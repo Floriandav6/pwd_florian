@@ -9,6 +9,7 @@ use App\Form\LikeFormType;
 use App\Repository\AdvertLikeRepository;
 use App\Repository\AdvertRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,7 @@ class DefaultController extends AbstractController
 
 
 {
-    private EntityManagerInterface $em;
+   // private EntityManagerInterface $em;
     public function __construct(EntityManagerInterface $em)
 
 
@@ -74,18 +75,23 @@ class DefaultController extends AbstractController
     }
 
 */
+
     /**
      * @Route ("/category", name="category")
      */
     // affichage des catégories et fonction du bouton like
-    public function category(AdvertRepository $advertRepository,Request $request,AdvertLikeRepository $advertLikeRepository,UserRepository $userRepository): Response
+    public function category(AdvertRepository $advertRepository,
+                             Request $request,
+                             AdvertLikeRepository $advertLikeRepository,
+                             UserRepository $userRepository,
+                             PaginatorInterface $paginator): Response
     {
-       $objadvert = new AdvertLike();
-         // $likeform = $this -> createForm(LikeFormType::class,$objadvert);
-        $likeform = $this -> createForm()
-        ->add('advert')
-        ->add('user')
-            ->getForm();
+        /*  $objadvert = new AdvertLike();
+            $likeform = $this -> createForm(LikeFormType::class,$objadvert);
+         /* $likeform = $this -> createForm(LikeFormType::class,$objadvert)
+          ->add('advert')
+          ->add('user')
+              ->getForm();
         $likeform ->handleRequest($request);
 
         if ($likeform -> isSubmitted() && $likeform ->isValid()) {
@@ -102,11 +108,13 @@ class DefaultController extends AbstractController
                 $this->em->flush();
             }
         }
+        */
+        $data = $advertRepository -> findAllWithCategories();
+        $adverts = $paginator->paginate($data,$request->query->getInt('page', 1),6
+        );
 
 
-        $adverts = $advertRepository ->findAllWithCategories();
-
-        return $this->render('pages/category.html.twig', ['adverts'=> $adverts,'form'=> $likeform -> createView()]);
+        return $this->render('pages/category.html.twig', ['adverts'=> $adverts /* , 'form'=> $likeform -> createView()*/]);
     }
 
         // Fonctions pour les filtres

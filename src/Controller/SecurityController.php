@@ -26,7 +26,6 @@ class SecurityController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()){
             $user->setPassword($passwordHasher->hashPassword($user, $user->getPlainPassword()));
-            dump($user->getPassword());
             $user->setRoles(['ROLE_USER']);
             $em->persist($user);
             $em->flush();
@@ -62,4 +61,3 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 }
-

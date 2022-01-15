@@ -38,10 +38,10 @@
             <div class="flex-fill">
                 <ul class="nav navbar-nav d-flex justify-content-between mx-lg-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('home') }}">Accueil</a>
+                        <a class="nav-link font-nav" href="{{ path('home') }}">Accueil</a>
                     </li>
                     <li class="nav-item nav-item-2">
-                        <a class="nav-link" href="{{ path('category') }}">Boutique</a>
+                        <a class="nav-link font-nav" href="{{ path('category') }}">Boutique</a>
                     </li>
 
                 </ul>
@@ -56,7 +56,7 @@
                     </div>
                 </div>
 
-                <a class="nav-icon position-relative text-decoration-none nav-item-3" href=>
+                <a class="nav-icon position-relative text-decoration-none nav-item-3" href={{ path('app_login') }}>
                     <i class="fa fa-fw fa-user text-dark mr-3"></i>
 
                 </a>
@@ -128,7 +128,7 @@
                         <li><a class="text-decoration-none" href="{{ path('home') }}">Accueil</a></li>
                         <li><a class="text-decoration-none" href="{{ path('category') }}">Boutique</a></li>
                         <li><a class="text-decoration-none" href="{{ path('contact') }}">Contact</a></li>
-                        <li><a class="text-decoration-none" href=>Se connecter</a></li>
+                        <li><a class="text-decoration-none" href={{ path('app_login') }}>Se connecter</a></li>
 
                     </ul>
                 </div>
