@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -71,13 +72,27 @@ class Advert
     /**
      * @Vich\UploadableField(mapping="annonce_images", fileNameProperty="image")
      * @var File
+     * @Assert\Image{
+     *       mimeTypes = {"image/jpeg", "image/gif", "image/png", "video/mp4", "video/quicktime", "video/avi"}
+     *       mimeTypesMessage = "Wrong file type (jpg,gif,png,mp4,mov,avi)"
+     *
+     *
      */
     private $imageFile;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="adverts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
+
 
 
     public function setImageFile(File $image = null)
     {
         $this->imageFile = $image;
+
 
         // VERY IMPORTANT:
         // It is required that at least one field changes if you are using Doctrine,
@@ -105,7 +120,6 @@ class Advert
 
         return $this;
     }
-
 
     public function __toString()
     {
@@ -237,5 +251,27 @@ class Advert
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function isLikedByUser( User $user) : bool {
+        foreach ($this->likes as $like){
+            if ($like->getUser() === $user){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }

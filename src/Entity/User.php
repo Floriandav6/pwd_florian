@@ -72,13 +72,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $roles = [];
 
+    /**
+     * @ORM\OneToMany(targetEntity=Advert::class, mappedBy="user")
+     */
+    private $adverts;
+
+
+
+
     public function __toString() {
-        return $this->id;
+        return $this->username;
     }
 
     public function __construct()
     {
         $this->likes = new ArrayCollection();
+        $this->adverts = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -239,5 +249,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // TODO: Implement @method string getUserIdentifier()
     }
+
+    /**
+     * @return Collection|Advert[]
+     */
+    public function getAdverts(): Collection
+    {
+        return $this->adverts;
+    }
+
+    public function addAdvert(Advert $advert): self
+    {
+        if (!$this->adverts->contains($advert)) {
+            $this->adverts[] = $advert;
+            $advert->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdvert(Advert $advert): self
+    {
+        if ($this->adverts->removeElement($advert)) {
+            // set the owning side to null (unless already changed)
+            if ($advert->getUser() === $this) {
+                $advert->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+
 
 }

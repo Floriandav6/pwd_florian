@@ -1,24 +1,25 @@
 {% extends "base.html.twig" %}
 
-
+{% block javascripts %}
+    <script src="{{ asset('js/main.js') }}" type="module"></script>
+    <script src="{{ asset('js/jquery-1.11.0.min.js') }}"></script>
+    <script src="{{ asset('js/jquery-migrate-1.2.1.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('js/templatemo.js') }}"></script>
+    <script src="{{ asset('js/custom.js') }}"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+{% endblock %}
 
 {% block stylesheets %}
     <!-- Block header et Footer -->
 
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/templatemo.css">
-    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/templatemo.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-    <link rel="stylesheet" href="/css/fontawesome.min.css">
+    <link rel="stylesheet" href="{{ asset('css/fontawesome.min.css') }}">
 {% endblock %}
 
-{% block javascripts %}
-    <script src="/js/jquery-1.11.0.min.js"></script>
-    <script src="/js/jquery-migrate-1.2.1.min.js"></script>
-    <script src="/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/templatemo.js"></script>
-    <script src="/js/custom.js"></script>
-{% endblock %}
 
 {% block body %}
     <!-- Header -->
@@ -27,7 +28,7 @@
     <div class="container d-flex justify-content-between align-items-center">
 
         <a class="navbar-brand text-success logo h1 align-self-center" href="{{ path('home') }}">
-            <img src="/img/logoUCdétouré.png" class="card-img-top logo-img" alt="...">
+            <img src="{{ asset('img/logoUCdétouré.png') }}" class="card-img-top logo-img" alt="...">
         </a>
 
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#templatemo_main_nav" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,6 +42,10 @@
                         <a class="nav-link font-nav" href="{{ path('home') }}">Accueil</a>
                     </li>
                     <li class="nav-item nav-item-2">
+                        <a class="nav-link font-nav" href="{{ path('contact') }}">Contact</a>
+                    </li>
+
+                    <li class="nav-item nav-item-3">
                         <a class="nav-link font-nav" href="{{ path('category') }}">Boutique</a>
                     </li>
 
@@ -56,8 +61,8 @@
                     </div>
                 </div>
 
-                <a class="nav-icon position-relative text-decoration-none nav-item-3" href={{ path('app_login') }}>
-                    <i class="fa fa-fw fa-user text-dark mr-3"></i>
+                <a class="nav-icon  nav-item-4" href={{ path('app_login') }}>
+                    <i class="fa fa-fw fa-user  mr-3"></i>
 
                 </a>
                 <a class="nav-icon d-none d-lg-inline icon-3 nav-item-3" href="{{ path('account') }}">

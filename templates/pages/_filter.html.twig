@@ -1,0 +1,13 @@
+{% if form is defined %}
+    {{ form_start(form) }}
+
+    {{ form_row(form.q) }}
+    <h3 style="margin-bottom: 20px;margin-left: 55px">Catégories</h3>
+    {{ form_row(form.categories) }}
+
+
+    <button type="submit" class=" w-100 btn-color">Filtre</button>
+    <button class="btn-color" href="{{ path('category') }}">Revoir toutes les annonces</button>
+    {{ form_end(form) }}
+
+{% endif %}

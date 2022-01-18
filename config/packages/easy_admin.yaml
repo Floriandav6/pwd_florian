@@ -9,7 +9,8 @@ easy_admin:
                   - {property: 'Brand'}
                   - {property: 'Size'}
                   - {property: 'Category'}
-                  - { property: 'imageFile', type: 'file' }
+                  - {property: 'imageFile', type: 'file' }
+
 
         AdvertLike:
             class : App\Entity\AdvertLike
@@ -17,4 +18,5 @@ easy_admin:
             class : App\Entity\Category
         User:
             class : App\Entity\User
-
+        Message:
+            class : App\Entity\Message

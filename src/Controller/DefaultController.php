@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+use App\Form\ContactType;
 use App\Repository\UserRepository;
 use App\Entity\User;
 use App\Entity\Advert;
@@ -10,6 +11,7 @@ use App\Repository\AdvertLikeRepository;
 use App\Repository\AdvertRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,13 +24,11 @@ class DefaultController extends AbstractController
 
 
 {
-   // private EntityManagerInterface $em;
-    public function __construct(EntityManagerInterface $em)
 
+    public function __construct(private EntityManagerInterface $em)
+    {
 
-{
-    $this ->em=$em;
-}
+    }
 
     /**
      * @Route("/", name="home")
@@ -42,121 +42,22 @@ class DefaultController extends AbstractController
      * @Route("/contact", name="contact")
      */
 
-    public function contact()
+    public function contact(Request $request,EntityManagerInterface $em)
     {
-        return $this->render('pages/contact.html.twig');
-    }
+        $form = $this->createForm(ContactType::class);
 
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
 
-    /**
-     * @Route("/account", name="account")
-     */
+            $data = $form->getData();
+            $em->persist($data);
+            $em->flush();
 
-    public function account()
-    {
-        return $this->render('pages/account.html.twig');
-    }
-
-   // /**
-     // * @Route("/connect", name="connect")
-      //*/
-/*
-    public function connect()
-    {
-        return $this->render('pages/connect.html.twig');
-    }
-
-     /* /**
-     * @Route("/signin", name="signin")
-     */
-    /* public function signin()
-    {
-        return $this->render('pages/signin.html.twig');
-    }
-
-*/
-
-    /**
-     * @Route ("/category", name="category")
-     */
-    // affichage des catégories et fonction du bouton like
-    public function category(AdvertRepository $advertRepository,
-                             Request $request,
-                             AdvertLikeRepository $advertLikeRepository,
-                             UserRepository $userRepository,
-                             PaginatorInterface $paginator): Response
-    {
-        /*  $objadvert = new AdvertLike();
-            $likeform = $this -> createForm(LikeFormType::class,$objadvert);
-         /* $likeform = $this -> createForm(LikeFormType::class,$objadvert)
-          ->add('advert')
-          ->add('user')
-              ->getForm();
-        $likeform ->handleRequest($request);
-
-        if ($likeform -> isSubmitted() && $likeform ->isValid()) {
-            $data = $likeform ->getData();
-            $find =  $advertLikeRepository -> findOneBy(['advert' => $data['advert'] ,'user' => $data['user']]);
-
-            if (empty($find)){
-                $varadvert = $advertRepository-> findOneBy(['id'=> $data['advert']]);
-                $varuser = $userRepository-> findOneBy(['id'=> $data['user']]);
-                $objadvert ->setAdvert($varadvert);
-                $objadvert->setUser($varuser);
-
-                $this->em->persist($objadvert);
-                $this->em->flush();
-            }
         }
-        */
-        $data = $advertRepository -> findAllWithCategories();
-        $adverts = $paginator->paginate($data,$request->query->getInt('page', 1),6
-        );
 
 
-        return $this->render('pages/category.html.twig', ['adverts'=> $adverts /* , 'form'=> $likeform -> createView()*/]);
-    }
-
-        // Fonctions pour les filtres
-    /**
-     * @Route ("/category/multi", name="multi")
-     */
-
-    public function multi(AdvertRepository $advertRepository): Response
-    {
-        $adverts = $advertRepository ->findBy(array('category' => 1));
-        return $this->render('pages/category.html.twig', ['adverts'=> $adverts]);
-    }
-
-    /**
-     * @Route ("/category/crampons", name="crampons")
-     */
-
-    public function crampons(AdvertRepository $advertRepository): Response
-    {
-        $adverts = $advertRepository ->findBy(array('category' => 2));
-        return $this->render('pages/category.html.twig', ['adverts'=> $adverts]);
-    }
-
-    /**
-     * @Route ("/category/indoor", name="indoor")
-     */
-
-    public function indoor(AdvertRepository $advertRepository): Response
-    {
-        $adverts = $advertRepository ->findBy(array('category' => 3));
-        return $this->render('pages/category.html.twig', ['adverts'=> $adverts]);
-    }
-
-
-    /**
-     * @Route ("/category/synthetique", name="synthetique")
-     */
-
-    public function synthetique(AdvertRepository $advertRepository): Response
-    {
-        $adverts = $advertRepository ->findBy(array('category' => 4));
-        return $this->render('pages/category.html.twig', ['adverts'=> $adverts]);
+        return $this->render('pages/contact.html.twig',[
+            'formulaire' => $form->createView() ]);
     }
 
 
@@ -165,56 +66,74 @@ class DefaultController extends AbstractController
      * @Route("/advert/{id}", name="advert")
      */
 
-    public function advert(int $id,AdvertRepository $advertRepository): Response
+    public function advert(int $id,
+                           AdvertRepository $advertRepository,
+                           Request $request,
+                           AdvertLikeRepository $advertLikeRepository,
+                           UserRepository $userRepository): Response
     {
+        $objadvert = new AdvertLike();
+        $likeform = $this -> createForm(LikeFormType::class,$objadvert);
+        $likeform ->handleRequest($request);
 
+        if ($likeform -> isSubmitted() && $likeform -> isValid()) {
+            $data = $likeform->getData();
+            $find =  $advertLikeRepository -> findOneBy(['advert' => $data->getAdvert() ->getId(),'user' => $data->getUser() ->getId()]);
 
-        $advert = $advertRepository->find($id);
-        if ($advert === null) {
-            throw new NotFoundHttpException("Advert inexistante");
+            if ($find == null ){
+
+                $this->em->persist($data);
+                $this->em->flush();
+            }
         }
 
+        $advert = $advertRepository->find($id);
 
 
-        return new Response("<h1>" .$advert->getTitle(). "</h1></body>");
+
+        return $this->render('pages/product.html.twig',['advert' => $advert,'form'=> $likeform -> createView()]);
 
 
     }
+    /**
+     * @Route("/advert/{id}/like", name="like")
+     */
+    public function like (Advert $advert, AdvertLikeRepository $advertLikeRepository): Response
+    {
+        $user = $this->getUser();
+        if (!$user) return $this->json([
+            'code' => 403,
+            'message' => 'Vous devez être connecté'
+        ],403);
 
-    // Fonction pour  tester la création d'une advert
-    // /**
-     // * @Route("/new-advert", name="create_advert")
-    // */
-   /* public function createAdvert(EntityManagerInterface $em): Response{
+        if ($advert->isLikedByUser($user)){
+            $target = $advertLikeRepository->findOneBy(['user'=>$user,'advert'=>$advert]);
 
-        $advert = new Advert();
-        $advert->setTitle("ESSAI")
-            ->setDescription("aaaaaaaazdzafzefzfzefzefzefzefezfze")
-            ->setPrice(12)
-            ->setBrand("Puma")
-            ->setSize(44);
+            $this->em->remove($target);
+            $this->em->flush();
 
-        $em->persist($advert);
-        $em->flush();
+            return $this->json([
+                'code' => 200,
+                'message' => 'Annonce déliké',
+                'like' => $advertLikeRepository->count(['advert'=>$advert])
 
-        return new Response("essai 33");
+            ]);
+
+        } else {
+            $like = new AdvertLike();
+            $like ->setAdvert($advert)
+                    ->setUser($user);
+
+                $this->em->persist($like);
+                $this->em->flush();
+
+            return $this->json([
+                'code' => 200,
+                'message' => 'Annonce liké',
+                'like' => $advertLikeRepository->count(['advert'=>$advert])
+            ]);
+
+        }
     }
 
-*/
-//    /**
-  //   * @Route("/category/{id}", name="category")
-    // */
-   // public function category(int $id): Response
-   // {
-     //   return new Response("<h1>category " . $id . "</h1></body>");
-   // }
-
-
-    // /**
-    //  * @Route("/a/{id}", name="view_advert")
-    // */
-    // public function viewAdvert(int $id): Response
-    //  {
-    //     return new Response("<h1>Annonces n°" . $id . "</h1></body>");
-    // }
  }

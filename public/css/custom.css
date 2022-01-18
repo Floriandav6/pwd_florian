@@ -4,20 +4,21 @@
     margin-bottom:-10px ;
 }
 .nav-item{
-   margin-left: -200px ;
+margin-left: -230px;
 
 }
-.nav-item-2{
-    margin-right: 300px;
-
+.fa-user:hover{
+    color: #59ab6e ;
 }
+
 .font-nav{
     font-size: 22px !important;
 }
-.nav-item-3{
-    margin-left: -250px;
-    font-size: 22px !important;
-    font-weight: 400 !important;
+.nav-item-4{
+    margin-left: -20px;
+    font-size: 21px !important;
+    font-weight: 500 !important;
+    margin-top: -1px
 }
 
 .brands{
@@ -219,7 +220,12 @@ EDIT ON
     font-weight: 300 !important;
 }
 .like{
-    font-size: 12px; !important;
+    font-size: 20px; !important;
+    color: #384047;
+    text-decoration: none;
+    margin-top: -27.4px;
+    margin-left: 18px;
+
 }
 
 .page-item.active .page-link {
@@ -230,4 +236,26 @@ EDIT ON
 }
 .page-link{
     color: #384047 ; !important;
+}
+.btn-color{
+    background-color: #59ab6e;
+    border-color: #389f6e;
+    margin-top: 50px;
+}
+.hidden{
+    display: none;
+}
+.fa-thumbs-up {
+    color: #59ab6e ;
+    font-size: 35px;
+}
+.btn-retour {
+    margin-left: 165px;
+}
+#sidebar-nav {
+    width: 160px;
+}
+.mail-2{
+
+    color: #4bc970 ! important;
 }

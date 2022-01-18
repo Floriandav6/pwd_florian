@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Data\SearchData;
 use App\Entity\Advert;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -37,6 +38,34 @@ class AdvertRepository extends ServiceEntityRepository
             ->setParameter('category',$category);
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+    /**
+     * @return Advert[]
+     */
+    public function findSearch(SearchData $search): array
+
+    {
+        $query =$this
+            ->createQueryBuilder('a')
+            ->select('c','a')
+           ->join('a.category','c');
+
+        if (!empty($search->q))
+        {
+            $query = $query
+                ->andWhere('a.Title LIKE :q')
+                ->setParameter('q',"%{$search->q}%");
+        }
+        if (!empty($search->categories))
+        {
+            $query = $query
+                ->andWhere('c.id IN (:categories)')
+                ->setParameter('categories', $search->categories);
+
+        }
+        return $query->getQuery()->getResult();
+    }
+    
     // /**
     //  * @return Advert[] Returns an array of Advert objects
     //  */
@@ -65,4 +94,5 @@ class AdvertRepository extends ServiceEntityRepository
         ;
     }
     */
+
 }
