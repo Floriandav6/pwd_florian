@@ -25,7 +25,7 @@ class PhotoCrudController extends AbstractCrudController
             IdField::new('id') -> hideOnForm(),
             AssociationField::new('gallery'),
             TextField::new('imageFile')->setFormType(VichImageType::class)->hideOnIndex(),
-            ImageField::new('image')->setBasePath('/img/couverture')->onlyOnIndex(),
+            ImageField::new('image')->setBasePath('img/couverture')->onlyOnIndex(),
         ];
     }
 

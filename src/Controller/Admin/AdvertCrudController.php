@@ -32,7 +32,7 @@ class AdvertCrudController extends AbstractCrudController
             AssociationField::new('category'),
             TextField::new('description'),
             TextField::new('imageFile')->setFormType(VichImageType::class)->hideOnIndex(),
-            ImageField::new('image')->setBasePath('/img/couverture')->onlyOnIndex(),
+            ImageField::new('image')->setBasePath('img/couverture')->onlyOnIndex(),
             TextField::new('brand'),
             TextField::new('price'),
             TextField::new('size'),

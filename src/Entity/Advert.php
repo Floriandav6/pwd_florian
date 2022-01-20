@@ -76,7 +76,6 @@ class Advert
      *       mimeTypes = {"image/jpeg", "image/gif", "image/png", "video/mp4", "video/quicktime", "video/avi"}
      *       mimeTypesMessage = "Wrong file type (jpg,gif,png,mp4,mov,avi)"
      *
-     *
      */
     private $imageFile;
 
